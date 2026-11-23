@@ -157,7 +157,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
 const UNK = '미확인';
 const L = {
 ko:{
- v_contact:'공급사 이메일 또는 전화', v_contact_hint:'* 공급사명은 필수, 이메일과 전화는 둘 중 하나 이상 필수입니다.', c_cat:'카탈로그 등재 여부', c_link:'카탈로그 링크·파일명', c_yes:'카탈로그에 있음', c_no:'카탈로그에 없음', c_unk:'미확인',
+ v_attr_half:'사양 항목의 이름 또는 값이 비어 있어 메일에서 빠집니다', v_contact:'공급사 이메일 또는 전화', v_contact_hint:'* 공급사명은 필수, 이메일과 전화는 둘 중 하나 이상 필수입니다.', c_cat:'카탈로그 등재 여부', c_link:'카탈로그 링크·파일명', c_yes:'카탈로그에 있음', c_no:'카탈로그에 없음', c_unk:'미확인',
  sec_att:'4-2. 첨부할 자료', sec_att_d:'체크하면 메일에 "첨부 자료" 문구가 들어갑니다. Gmail 창에서 파일은 직접 붙여야 합니다.',
  at_spec:'고객 요청 사양서', at_photo:'현품 사진', at_catalog:'카탈로그 해당 페이지', att_q:'체크한 첨부 파일을 Gmail 창에 직접 붙이셔야 합니다. 계속할까요?',
  f_files:'파일 선택 (사진, PDF, 엑셀 등. 이 화면에서 Gmail로 자동 첨부되지는 않습니다)', att_nofile:'첨부 자료를 체크했지만 선택된 파일이 없음',
@@ -204,7 +204,7 @@ ko:{
  s_ceo:'대표이사', s_director:'이사', s_customers:'주요 고객사', s_revenue:'연 매출 문구 (비우면 생략)'
 },
 vi:{
- v_contact:'Email hoặc điện thoại NCC', v_contact_hint:'* Bắt buộc có tên NCC và ít nhất một trong hai: email hoặc điện thoại.', c_cat:'Có trong catalog không', c_link:'Link / tên file catalog', c_yes:'Có trong catalog', c_no:'Không có trong catalog', c_unk:'Chưa xác nhận',
+ v_attr_half:'Mục thông số thiếu tên hoặc giá trị nên sẽ không có trong email', v_contact:'Email hoặc điện thoại NCC', v_contact_hint:'* Bắt buộc có tên NCC và ít nhất một trong hai: email hoặc điện thoại.', c_cat:'Có trong catalog không', c_link:'Link / tên file catalog', c_yes:'Có trong catalog', c_no:'Không có trong catalog', c_unk:'Chưa xác nhận',
  sec_att:'4-2. Tài liệu đính kèm', sec_att_d:'Tích chọn sẽ thêm câu "Tài liệu đính kèm" vào email. Phải tự đính kèm file trong cửa sổ Gmail.',
  at_spec:'Bản yêu cầu kỹ thuật của khách hàng', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
  f_files:'Chọn file (ảnh, PDF, Excel... Trang này không tự đính kèm vào Gmail)', att_nofile:'Đã tích chọn tài liệu đính kèm nhưng chưa chọn file nào',
@@ -276,12 +276,17 @@ function addBizDays(n){ const d=new Date(); while(n>0){ d.setDate(d.getDate()+1)
 // 품목 = 제품 1개. attrs: 사양 항목(재질, 표면처리, 포장 단위...), rows: 규격별 수량.
 const newRow = () => ({spec:'',qty:''});
 const newItem = () => ({name:'',model:'',attrs:[],rows:[newRow()],unit:'EA',code:'',moq:'',cat:'',catLink:''});
+// 저장 데이터의 글자 칸은 문자열이어야 한다(손상·구버전 값이 .trim() 등에서 오류를 내지 않게).
+const str = v => typeof v==='string' ? v : (typeof v==='number'&&isFinite(v) ? String(v) : '');
+function strKeys(o, keys){ keys.forEach(k=>{ if(k in o) o[k]=str(o[k]); }); return o; }
 function normItem(x){
   const it=Object.assign(newItem(),x);
   if(!Array.isArray(x.rows)||!x.rows.length) it.rows=[{spec:String(x.spec||''),qty:String(x.qty||'')}]; // 구버전 품목 변환
-  it.rows=it.rows.filter(r=>r&&typeof r==='object').map(r=>Object.assign(newRow(),r));
+  it.rows=it.rows.filter(r=>r&&typeof r==='object').map(r=>strKeys(Object.assign(newRow(),r),['spec','qty']));
   if(!it.rows.length) it.rows=[newRow()];
-  it.attrs=(Array.isArray(it.attrs)?it.attrs:[]).filter(a=>a&&typeof a==='object').map(a=>Object.assign({k:'',v:''},a));
+  it.attrs=(Array.isArray(it.attrs)?it.attrs:[]).filter(a=>a&&typeof a==='object').map(a=>strKeys(Object.assign({k:'',v:''},a),['k','v']));
+  strKeys(it,['name','model','unit','code','moq','catLink']);
+  if(!['','yes','no','unk'].includes(it.cat)) it.cat='';
   delete it.spec; delete it.qty;
   return it;
 }
@@ -305,6 +310,7 @@ function normalize(o){
   if(!r.items.length) r.items=[newItem()];
   r.asks=Object.assign(blank().asks,(r.asks&&typeof r.asks==='object')?r.asks:{});
   r.att=Object.assign(blank().att,(r.att&&typeof r.att==='object')?r.att:{});
+  strKeys(r,['staff','site','dept','sPic','needBy','repeat','memo','supName','supPic','supEmail','supTel','replyBy']);
   if(!['new','maint','cons','sample'].includes(r.purpose)) r.purpose='';
   if(!['A','B','C'].includes(r.intro)) r.intro='A';
   if(!['none','ask','strong'].includes(r.prot)) r.prot='ask';
@@ -313,6 +319,7 @@ function normalize(o){
 let S = normalize(store.get('vst_rfq_draft',{}));
 // 작성자를 설정의 발신자 이름으로 자동 채운다(직접 바꿀 수도 있다).
 if(!String(S.staff||'').trim() && String(SET.sender||'').trim()) S.staff=SET.sender;
+let lastSender=String(SET.sender||''); // 설정에서 이름을 한 글자씩 칠 때 작성자도 같이 따라가게 한다.
 function ymd(d){ const p=x=>String(x).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
 const dateOf = ts => { const d=ts?new Date(ts):null; return d&&!isNaN(d)?ymd(d):''; };
 const sentDate = s => dateOf(s.ts)||ymd(new Date());
@@ -367,7 +374,10 @@ function renderFiles(){
     w.append(row);
   });
 }
+// 항목명은 메일에 한국어로 들어간다. 베트남어 화면에서는 뜻을 괄호 앞에 붙여 보여 준다.
 const ATTR_KEYS=['재질','표면처리','포장 단위','압력 등급','전압·상·주파수','연결 방식','기타'];
+const ATTR_VI={'재질':'Vật liệu','표면처리':'Xử lý bề mặt','포장 단위':'Quy cách đóng gói','압력 등급':'Cấp áp suất','전압·상·주파수':'Điện áp/pha/tần số','연결 방식':'Kiểu kết nối','기타':'Khác'};
+const attrChip = k => '+ '+(lang==='vi'?ATTR_VI[k]+(k==='기타'?'':' ('+k+')'):k);
 function textIn(obj,key,ph,extra){
   const i=el('input',Object.assign({type:'text',placeholder:ph,'aria-label':ph},extra||{}));
   i.value=obj[key]??''; i.addEventListener('input',()=>{ obj[key]=i.value; refresh(); }); return i;
@@ -379,7 +389,7 @@ function specBlock(it){
     textIn(a,'k',t('i_attr_k'),{list:'attrkeys'}), textIn(a,'v',t('i_attr_v')),
     delBtn(()=>{ it.attrs.splice(j,1); renderForm(); refresh(); }))));
   box.append(el('div',{class:'btns',style:'margin:4px 0'},ATTR_KEYS.map(k=>
-    el('button',{type:'button',class:'chip',onclick:()=>{ it.attrs.push({k:k==='기타'?'':k,v:''}); renderForm(); refresh(); }},'+ '+k))));
+    el('button',{type:'button',class:'chip',onclick:()=>{ it.attrs.push({k:k==='기타'?'':k,v:''}); renderForm(); refresh(); }},attrChip(k)))));
   return box;
 }
 function rowsBlock(it){
@@ -402,7 +412,7 @@ function renderForm(){
     field(S,'repeat','f_repeat',{ph:'ph_repeat'}),
     field(S,'memo','f_memo',{wide:1}))));
   const pick=el('select',{id:'supPick'}, el('option',{value:''},'— '+t('sup_pick')+' —'));
-  SUP.forEach((x,i)=>pick.append(el('option',{value:i},x.name)));
+  SUP.forEach((x,i)=>{ if(has(x.name)) pick.append(el('option',{value:i},x.name)); });
   pick.addEventListener('change',()=>{ const x=SUP[pick.value]; if(!x) return;
     S.supName=x.name; S.supPic=x.pic||''; S.supEmail=x.email||''; S.supTel=x.tel||''; renderForm(); refresh(); });
   f.append(card('sec_sup',null,
@@ -452,7 +462,10 @@ function renderForm(){
 }
 function renderSet(){
   const f=$('#setForm'); f.textContent='';
-  const save=()=>{ store.set('vst_rfq_set',SET); if(!has(S.staff)) S.staff=SET.sender; refresh(); };
+  const save=()=>{ store.set('vst_rfq_set',SET);
+    // 작성자가 비었거나 직전 발신자 이름 그대로(직접 바꾸지 않음)일 때만 새 발신자 이름을 따라간다.
+    if(!has(S.staff) || S.staff===lastSender) S.staff=SET.sender;
+    lastSender=String(SET.sender||''); refresh(); };
   ['company','sender','role','tel','email','ceo','director','customers','revenue'].forEach(k=>
     f.append(field(SET,k,'s_'+k,{after:save, req:k==='sender'||k==='company'})));
   const sf=$('#syncForm'); sf.textContent='';
@@ -490,6 +503,7 @@ function validate(s=S){
     const p=t('item')+' '+(i+1)+' – ';
     hard(it.name,p+t('i_name'));
     if(!has(it.model)&&!it.rows.some(r=>has(r.spec))) miss.push(p+t('i_ms'));
+    if(it.attrs.some(a=>has(a.k)!==has(a.v))) unk.push(p+t('v_attr_half'));
     it.rows.forEach((r,j)=>{
       const pr=p+(it.rows.length>1?t('row')+' '+(j+1)+' – ':'');
       hard(r.qty,pr+t('i_qty'));
@@ -727,7 +741,10 @@ function applyLang(){
   document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
   document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
   document.title=t('title');
+  // 메일 본문은 언어와 무관하게 한국어이므로, 언어만 바꿀 때 직접 고친 제목·본문을 지우지 않는다.
+  const subj=$('#mailSubj').value, body=$('#mailBody').value;
   renderForm(); renderSet(); refresh(); renderHist();
+  if(body){ $('#mailSubj').value=subj; $('#mailBody').value=body; }
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; store.set('vst_rfq_lang',lang); applyLang(); });
@@ -738,7 +755,7 @@ $('#bCopyNudge').onclick=async()=>{ if(!guard()) return; doneCopy(await copy($('
 $('#bGmail').onclick=async()=>{
   if(!guard()||!attOK()) return;
   // 팝업 차단을 피하려고 클릭 직후 동기적으로 먼저 연다.
-  window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.supEmail||'')?S.supEmail:'')+'&su='+encodeURIComponent($('#mailSubj').value),'_blank','noopener');
+  window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test((S.supEmail||'').trim())?S.supEmail.trim():'')+'&su='+encodeURIComponent($('#mailSubj').value),'_blank','noopener');
   const ok=await copy($('#mailBody').value); const rec=saveRecord();
   toast(ok?t('toast_gmail'):t('toast_fail'));
   const s=await syncRecord(rec); if(s!==null) toast((ok?t('toast_gmail'):t('toast_fail'))+' · '+(s?t('sync_ok'):t('sync_fail')));
