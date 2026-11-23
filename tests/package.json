@@ -1,0 +1,1 @@
+{"name":"rfq-mailer-tests","private":true,"scripts":{"test":"node smoke.test.js"},"dependencies":{"jsdom":"^24.1.3"}}

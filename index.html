@@ -150,6 +150,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
   <option value="SEMV (삼성전기, 타이응우옌)"><option value="SEHC (호치민)">
 </datalist>
 <datalist id="units"><option value="EA"><option value="SET"><option value="PAC"><option value="대"><option value="BOX"><option value="M"></datalist>
+<datalist id="attrkeys"><option value="재질"><option value="표면처리"><option value="포장 단위"><option value="압력 등급"><option value="전압·상·주파수"><option value="연결 방식"><option value="색상"><option value="비고"></datalist>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -161,6 +162,7 @@ ko:{
  at_spec:'고객 요청 사양서', at_photo:'현품 사진', at_catalog:'카탈로그 해당 페이지', att_q:'체크한 첨부 파일을 Gmail 창에 직접 붙이셔야 합니다. 계속할까요?',
  f_files:'파일 선택 (사진, PDF, 엑셀 등. 이 화면에서 Gmail로 자동 첨부되지는 않습니다)', att_nofile:'첨부 자료를 체크했지만 선택된 파일이 없음',
  who:'작성자', who_none:'미지정 (설정 탭에서 이름 입력)', v_author:'작성자와 서명 이름이 다릅니다 (서명은 설정의 발신자 이름)',
+ i_attrs:'사양 항목 (재질, 표면처리, 포장 단위, 전압 등을 항목별로 추가)', i_attr_k:'항목명', i_attr_v:'값', i_rows:'규격별 수량 (규격이 하나면 한 줄만)', i_row_spec:'규격 (예: 1/2", M6×8mm)', add_row:'+ 규격 추가', row:'규격',
  sync_title:'공유 저장 (Google 시트)', sync_d:'저장할 때 요청 내용(공급사, 품목, 수량, 삼성 코드 등. 메일 본문 제외)이 관리자의 Google 시트에 한 줄씩 쌓입니다. 관리자에게 받은 URL과 비밀 문자열을 입력하세요. 비워 두면 이 PC에만 저장됩니다.',
  s_syncUrl:'공유 저장 웹앱 URL', s_syncToken:'비밀 문자열', b_synctest:'연결 시험', b_shared:'전체 직원 기록 불러오기',
  sync_ok:'공유 시트에 기록됨', sync_fail:'공유 시트 연결 실패 (이 PC에는 저장됨)', sync_loading:'불러오는 중…', sync_none:'설정 탭에서 공유 저장을 먼저 설정하세요', sync_test_ok:'연결 성공',
@@ -172,7 +174,7 @@ ko:{
  title:'VST 견적요청 메일 작성기', tab_write:'작성', tab_hist:'기록', tab_set:'설정',
  sec_req:'1. 삼성 요청 정보 (내부 기록)',
  sec_req_d:'삼성 법인·공장, 부서, 삼성 코드, 최종 고객명은 5번에서 켜지 않으면 메일에 들어가지 않습니다. 단 용도, 연간 수요, 요청 납기는 항상 메일에 들어갑니다. 모르는 값은 비워 두지 말고 "미확인"을 누르세요.',
- sec_sup:'2. 공급사', sec_items:'3. 품목', sec_ask:'4. 공급사에 요청할 사항', sec_opt:'5. 문구와 공개 범위',
+ sec_sup:'2. 공급사', sec_items:'3. 제품 · 사양 · 수량', sec_ask:'4. 공급사에 요청할 사항', sec_opt:'5. 문구와 공개 범위',
  f_staff:'작성자 (담당 직원)', f_site:'삼성 법인·공장', f_dept:'사용 부서', f_sPic:'삼성 담당자', f_purpose:'용도',
  f_needBy:'삼성 요청 납기', f_repeat:'연간 예상 수요', f_memo:'내부 메모',
  f_supName:'공급사명', f_supPic:'공급사 담당자', f_supEmail:'공급사 이메일',
@@ -207,6 +209,7 @@ vi:{
  at_spec:'Bản yêu cầu kỹ thuật của khách hàng', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
  f_files:'Chọn file (ảnh, PDF, Excel... Trang này không tự đính kèm vào Gmail)', att_nofile:'Đã tích chọn tài liệu đính kèm nhưng chưa chọn file nào',
  who:'Người soạn', who_none:'Chưa chọn (nhập tên ở tab Cài đặt)', v_author:'Người soạn khác tên ký email (tên ký lấy từ Cài đặt)',
+ i_attrs:'Thông số (thêm theo từng mục: vật liệu, xử lý bề mặt, quy cách đóng gói, điện áp...)', i_attr_k:'Tên mục', i_attr_v:'Giá trị', i_rows:'Số lượng theo kích thước (một kích thước thì chỉ một dòng)', i_row_spec:'Kích thước (VD: 1/2", M6×8mm)', add_row:'+ Thêm kích thước', row:'Kích thước',
  sync_title:'Lưu chung (Google Sheets)', sync_d:'Khi lưu, nội dung yêu cầu (NCC, hàng hóa, số lượng, mã Samsung... không gồm nội dung email) được ghi thành từng dòng vào Google Sheets của quản trị viên. Nhập URL và chuỗi bí mật do quản trị viên cung cấp. Để trống thì chỉ lưu trên máy này.',
  s_syncUrl:'URL ứng dụng lưu chung', s_syncToken:'Chuỗi bí mật', b_synctest:'Kiểm tra kết nối', b_shared:'Tải bản ghi của mọi nhân viên',
  sync_ok:'Đã ghi vào bảng chung', sync_fail:'Kết nối bảng chung thất bại (đã lưu trên máy này)', sync_loading:'Đang tải…', sync_none:'Hãy cài đặt lưu chung ở tab Cài đặt trước', sync_test_ok:'Kết nối thành công',
@@ -218,7 +221,7 @@ vi:{
  title:'Soạn email yêu cầu báo giá (VST)', tab_write:'Soạn', tab_hist:'Lịch sử', tab_set:'Cài đặt',
  sec_req:'1. Thông tin yêu cầu từ Samsung (nội bộ)',
  sec_req_d:'Pháp nhân/nhà máy, bộ phận, mã Samsung và tên khách hàng cuối chỉ vào email khi bật ở mục 5. Tuy nhiên mục đích, nhu cầu hằng năm và hạn giao hàng luôn có trong email. Nếu chưa biết, đừng để trống mà hãy bấm "Chưa rõ".',
- sec_sup:'2. Nhà cung cấp', sec_items:'3. Hạng mục', sec_ask:'4. Nội dung yêu cầu nhà cung cấp', sec_opt:'5. Câu chữ và phạm vi công khai',
+ sec_sup:'2. Nhà cung cấp', sec_items:'3. Hàng hóa · thông số · số lượng', sec_ask:'4. Nội dung yêu cầu nhà cung cấp', sec_opt:'5. Câu chữ và phạm vi công khai',
  f_staff:'Người soạn (nhân viên phụ trách)', f_site:'Pháp nhân / nhà máy Samsung', f_dept:'Bộ phận sử dụng', f_sPic:'Đầu mối phía Samsung', f_purpose:'Mục đích',
  f_needBy:'Hạn giao hàng Samsung yêu cầu', f_repeat:'Nhu cầu dự kiến hằng năm', f_memo:'Ghi chú nội bộ',
  f_supName:'Tên nhà cung cấp', f_supPic:'Người phụ trách NCC', f_supEmail:'Email NCC',
@@ -270,7 +273,26 @@ SUP = Array.isArray(SUP) ? SUP.filter(x=>x&&typeof x==='object') : SUP_SEED;
 const saveSup = () => store.set('vst_rfq_sup',SUP);
 function addBizDays(n){ const d=new Date(); while(n>0){ d.setDate(d.getDate()+1); const w=d.getDay(); if(w!==0&&w!==6) n--; }
   return ymd(d); }
-const newItem = () => ({name:'',model:'',spec:'',qty:'',unit:'EA',code:'',moq:'',cat:'',catLink:''});
+// 품목 = 제품 1개. attrs: 사양 항목(재질, 표면처리, 포장 단위...), rows: 규격별 수량.
+const newRow = () => ({spec:'',qty:''});
+const newItem = () => ({name:'',model:'',attrs:[],rows:[newRow()],unit:'EA',code:'',moq:'',cat:'',catLink:''});
+function normItem(x){
+  const it=Object.assign(newItem(),x);
+  if(!Array.isArray(x.rows)||!x.rows.length) it.rows=[{spec:String(x.spec||''),qty:String(x.qty||'')}]; // 구버전 품목 변환
+  it.rows=it.rows.filter(r=>r&&typeof r==='object').map(r=>Object.assign(newRow(),r));
+  if(!it.rows.length) it.rows=[newRow()];
+  it.attrs=(Array.isArray(it.attrs)?it.attrs:[]).filter(a=>a&&typeof a==='object').map(a=>Object.assign({k:'',v:''},a));
+  delete it.spec; delete it.qty;
+  return it;
+}
+const qtyNum = q => { const n=Number(String(q??'').replace(/,/g,'')); return isFinite(n)?n:NaN; };
+const itemTotal = it => it.rows.reduce((a,r)=>{ const n=qtyNum(r.qty); return a+(n>0?n:0); },0);
+function itemSpecText(it){
+  const a=it.attrs.filter(x=>has(x.k)&&has(x.v)).map(x=>`${x.k}: ${x.v}`);
+  const rows=it.rows.filter(r=>has(r.spec));
+  if(rows.length) a.push((it.rows.length>1?'규격별 ':'규격 ')+rows.map(r=>has(r.qty)&&it.rows.length>1?`${r.spec} ${r.qty}`:r.spec).join(', '));
+  return a.join(' / ');
+}
 const blank = () => ({staff:'',site:'',dept:'',sPic:'',purpose:'',needBy:'',repeat:'',memo:'',
   supName:'',supPic:'',supEmail:'', items:[newItem()],
   asks:{quote:true,moq:true,lead:true,pay:true,inco:false,doc:false,war:false,hs:true,co:true,cq:true,spare:false},
@@ -279,7 +301,7 @@ const blank = () => ({staff:'',site:'',dept:'',sPic:'',purpose:'',needBy:'',repe
 // 저장된 구버전·손상 데이터를 안전하게 정리한다.
 function normalize(o){
   const r=Object.assign(blank(), (o&&typeof o==='object'&&!Array.isArray(o))?o:{});
-  r.items=(Array.isArray(r.items)?r.items:[]).filter(x=>x&&typeof x==='object').map(x=>Object.assign(newItem(),x));
+  r.items=(Array.isArray(r.items)?r.items:[]).filter(x=>x&&typeof x==='object').map(normItem);
   if(!r.items.length) r.items=[newItem()];
   r.asks=Object.assign(blank().asks,(r.asks&&typeof r.asks==='object')?r.asks:{});
   r.att=Object.assign(blank().att,(r.att&&typeof r.att==='object')?r.att:{});
@@ -302,7 +324,7 @@ function el(tag, attrs, ...kids){
     else if(k==='class') e.className=attrs[k];
     else e.setAttribute(k, attrs[k]);
   }
-  kids.flat().forEach(c=>{ if(c!=null && c!=='') e.append(c); });
+  kids.flat(Infinity).forEach(c=>{ if(c!=null && c!=='') e.append(c); });
   return e;
 }
 let uid=0;
@@ -345,6 +367,29 @@ function renderFiles(){
     w.append(row);
   });
 }
+const ATTR_KEYS=['재질','표면처리','포장 단위','압력 등급','전압·상·주파수','연결 방식','기타'];
+function textIn(obj,key,ph,extra){
+  const i=el('input',Object.assign({type:'text',placeholder:ph,'aria-label':ph},extra||{}));
+  i.value=obj[key]??''; i.addEventListener('input',()=>{ obj[key]=i.value; refresh(); }); return i;
+}
+function delBtn(fn){ return el('button',{type:'button',class:'x','aria-label':t('b_del'),onclick:fn},'×'); }
+function specBlock(it){
+  const box=el('div',{class:'fld wide'},el('label',null,t('i_attrs')));
+  it.attrs.forEach((a,j)=>box.append(el('div',{class:'inrow',style:'margin:4px 0'},
+    textIn(a,'k',t('i_attr_k'),{list:'attrkeys'}), textIn(a,'v',t('i_attr_v')),
+    delBtn(()=>{ it.attrs.splice(j,1); renderForm(); refresh(); }))));
+  box.append(el('div',{class:'btns',style:'margin:4px 0'},ATTR_KEYS.map(k=>
+    el('button',{type:'button',class:'chip',onclick:()=>{ it.attrs.push({k:k==='기타'?'':k,v:''}); renderForm(); refresh(); }},'+ '+k))));
+  return box;
+}
+function rowsBlock(it){
+  const box=el('div',{class:'fld wide'},el('label',null,t('i_rows'),el('span',{class:'req'},' *')));
+  it.rows.forEach((r,j)=>box.append(el('div',{class:'inrow',style:'margin:4px 0'},
+    textIn(r,'spec',t('i_row_spec')), textIn(r,'qty',t('i_qty'),{inputmode:'numeric',style:'max-width:130px'}),
+    it.rows.length>1?delBtn(()=>{ it.rows.splice(j,1); renderForm(); refresh(); }):'')));
+  box.append(el('button',{type:'button',onclick:()=>{ it.rows.push(newRow()); renderForm(); refresh(); }},t('add_row')));
+  return box;
+}
 function renderForm(){
   const f=$('#form'); f.textContent='';
   f.append(card('sec_req','sec_req_d', el('div',{class:'fields'},
@@ -379,8 +424,8 @@ function renderForm(){
     el('div',{class:'fields'},
       field(it,'name','i_name',{req:1}),
       field(it,'model','i_model'),
-      field(it,'spec','i_spec',{wide:1}),
-      field(it,'qty','i_qty',{req:1}),
+      specBlock(it),
+      rowsBlock(it),
       field(it,'unit','i_unit',{list:'units'}),
       field(it,'code','i_code',{req:1,unk:1}),
       field(it,'moq','i_moq'),
@@ -444,9 +489,12 @@ function validate(s=S){
   s.items.forEach((it,i)=>{
     const p=t('item')+' '+(i+1)+' – ';
     hard(it.name,p+t('i_name'));
-    if(!has(it.model)&&!has(it.spec)) miss.push(p+t('i_ms'));
-    hard(it.qty,p+t('i_qty'));
-    if(known(it.qty) && !(Number(String(it.qty).replace(/,/g,''))>0)) miss.push(p+t('v_qty'));
+    if(!has(it.model)&&!it.rows.some(r=>has(r.spec))) miss.push(p+t('i_ms'));
+    it.rows.forEach((r,j)=>{
+      const pr=p+(it.rows.length>1?t('row')+' '+(j+1)+' – ':'');
+      hard(r.qty,pr+t('i_qty'));
+      if(known(r.qty) && !(qtyNum(r.qty)>0)) miss.push(pr+t('v_qty'));
+    });
     chk(it.code,p+t('i_code'));
     if(!has(it.cat)) miss.push(p+t('c_cat')); else if(it.cat==='unk') unk.push(p+t('c_cat'));
   });
@@ -480,8 +528,16 @@ function buildMail(s){
   const lines=s.items.map((it,i)=>{
     const r=[`${i+1}. 품명: ${it.name||''}`];
     if(has(it.model)) r.push(`   - 모델·품번: ${it.model}`);
-    if(has(it.spec)) r.push(`   - 규격·사양: ${it.spec}`);
-    r.push(`   - 수량: ${fmtQty(it.qty)} ${it.unit||''}`.trimEnd());
+    it.attrs.filter(a=>has(a.k)&&has(a.v)).forEach(a=>r.push(`   - ${a.k}: ${a.v}`));
+    const u=it.unit||'', rws=it.rows.filter(x=>has(x.spec)||has(x.qty));
+    if(rws.length<=1){
+      if(rws[0]&&has(rws[0].spec)) r.push(`   - 규격: ${rws[0].spec}`);
+      r.push(`   - 수량: ${fmtQty(rws[0]?rws[0].qty:'')} ${u}`.trimEnd());
+    }else{
+      r.push('   - 규격별 수량:');
+      rws.forEach(x=>r.push(`     · ${has(x.spec)?x.spec:'-'}: ${fmtQty(x.qty)} ${u}`.trimEnd()));
+      r.push(`     합계: ${fmtQty(itemTotal(it))} ${u}`.trimEnd());
+    }
     if(s.oSamsung && s.oCode && known(it.code)) r.push(`   - 고객 자재코드: ${it.code}`);
     if(it.cat==='yes'&&known(it.catLink)) r.push(`   - 참고 카탈로그: ${it.catLink}`);
     if(it.cat==='no'||it.cat==='unk') r.push('   - 비고: 귀사 카탈로그에서 확인되지 않은 품목입니다. 취급 여부와 대체 가능 모델을 함께 안내해 주시기 바랍니다.');
@@ -524,7 +580,7 @@ function buildInternal(s, v){
     `용도: ${KO_PURPOSE[s.purpose]||'(빈칸)'} / 삼성 요청 납기: ${d(s.needBy)}${has(s.repeat)?' / 연간 수요: '+s.repeat:''}`,
     `공급사: ${d(s.supName)}${has(s.supPic)?' ('+s.supPic+')':''}${has(s.supEmail)?' '+s.supEmail:''}`,
     '품목:'];
-  s.items.forEach((it,i)=>r.push(` ${i+1}. ${[it.name,it.model,it.spec].filter(has).join(' | ')} | ${fmtQty(it.qty)} ${it.unit||''} | 삼성 코드: ${d(it.code)} | MOQ: ${has(it.moq)?it.moq:'공급사 문의 중'}`));
+  s.items.forEach((it,i)=>r.push(` ${i+1}. ${[it.name,it.model,itemSpecText(it)].filter(has).join(' | ')} | ${fmtQty(itemTotal(it))} ${it.unit||''} | 삼성 코드: ${d(it.code)} | MOQ: ${has(it.moq)?it.moq:'공급사 문의 중'}`));
   const CN={yes:'있음',no:'없음',unk:'미확인'};
   r.push('카탈로그: '+s.items.map((it,i)=>`${i+1}) ${CN[it.cat]||'(빈칸)'}`).join(', '));
   r.push('회신 확인일: '+d(s.replyBy));
@@ -585,7 +641,7 @@ const guard = () => { if(validate().miss.length){ toast(t('v_block')); return fa
 const attOK = () => !(FILES.length||Object.values(S.att||{}).some(Boolean)) || confirm(t('att_q')+'\n\n'+FILES.map(f=>'• '+f.name).join('\n'));
 const doneCopy = ok => toast(ok?t('toast_copied'):t('toast_fail'));
 const getHist = () => { const h=store.get('vst_rfq_hist',[]);
-  return Array.isArray(h) ? h.filter(r=>r&&typeof r==='object').map(r=>Object.assign({},r,{items:Array.isArray(r.items)?r.items.filter(x=>x&&typeof x==='object'):[]})) : []; };
+  return Array.isArray(h) ? h.filter(r=>r&&typeof r==='object').map(r=>Object.assign({},r,{items:Array.isArray(r.items)?r.items.filter(x=>x&&typeof x==='object').map(normItem):[]})) : []; };
 function saveRecord(){
   const rec=JSON.parse(JSON.stringify(S));
   // 같은 공급사로 다시 저장할 때만 덮어쓴다. 공급사를 바꾸면 새 기록이 된다.
@@ -603,7 +659,7 @@ function toRows(rec){
   const contact=[rec.supEmail,rec.supTel].filter(has).join(' / ');
   const CN={yes:'있음',no:'없음',unk:'미확인'};
   return rec.items.map((it,i)=>[rec.id,i+1,rec.ts,rec.staff||'',rec.supName||'',contact,rec.site||'',rec.dept||'',
-    it.name||'',it.model||'',it.spec||'',it.qty||'',it.unit||'',it.code||'',it.moq||'',CN[it.cat]||'',KO_PURPOSE[rec.purpose]||'',rec.needBy||'',rec.replyBy||'']);
+    it.name||'',it.model||'',itemSpecText(it),String(itemTotal(it)),it.unit||'',it.code||'',it.moq||'',CN[it.cat]||'',KO_PURPOSE[rec.purpose]||'',rec.needBy||'',rec.replyBy||'']);
 }
 // 반환: null = 공유 저장 미설정, true/false = 성공/실패
 async function syncRecord(rec){
@@ -640,7 +696,7 @@ function renderHist(){
     const v=validate(r);
     body.append(el('tr',null,
       el('td',null,dateOf(r.ts)), el('td',null,r.staff||''), el('td',null,r.supName||''),
-      el('td',null,r.items.map(it=>`${[it.name,it.model].filter(has).join(' ')} × ${fmtQty(it.qty)}`).join(', ')),
+      el('td',null,r.items.map(it=>`${[it.name,it.model].filter(has).join(' ')} × ${fmtQty(itemTotal(it))}`).join(', ')),
       el('td',null,[r.site,r.dept].filter(has).join(' / ')),
       el('td',null,v.unk.join(', ')),
       el('td',{style:'white-space:nowrap'},
@@ -654,7 +710,7 @@ function exportCsv(){
   // 엑셀 수식 주입 방지: = + - @ 로 시작하는 셀 앞에 ' 를 붙인다.
   const q=x=>{ let v=String(x??''); if(/^[=+\-@\t\r]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"'; };
   const rows=[['날짜','담당 직원','삼성 법인·공장','사용 부서','삼성 담당자','용도','삼성 요청 납기','연간 수요','공급사','공급사 담당자','공급사 이메일','공급사 전화','품명','모델·품번','규격·사양','수량','단위','삼성 코드','MOQ','카탈로그','카탈로그 링크','회신 확인일','메모']];
-  getHist().forEach(r=>r.items.forEach(it=>rows.push([dateOf(r.ts),r.staff,r.site,r.dept,r.sPic,KO_PURPOSE[r.purpose]||'',r.needBy,r.repeat,r.supName,r.supPic,r.supEmail,r.supTel,it.name,it.model,it.spec,it.qty,it.unit,it.code,it.moq,({yes:'있음',no:'없음',unk:'미확인'})[it.cat]||'',it.catLink,r.replyBy,r.memo])));
+  getHist().forEach(r=>r.items.forEach(it=>rows.push([dateOf(r.ts),r.staff,r.site,r.dept,r.sPic,KO_PURPOSE[r.purpose]||'',r.needBy,r.repeat,r.supName,r.supPic,r.supEmail,r.supTel,it.name,it.model,itemSpecText(it),itemTotal(it),it.unit,it.code,it.moq,({yes:'있음',no:'없음',unk:'미확인'})[it.cat]||'',it.catLink,r.replyBy,r.memo])));
   const blob=new Blob(['﻿'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=el('a',{href:URL.createObjectURL(blob),download:'VST_견적요청_기록_'+ymd(new Date())+'.csv'});
   document.body.append(a); a.click(); a.remove();
