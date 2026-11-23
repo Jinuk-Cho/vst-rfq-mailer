@@ -6,6 +6,7 @@
 <title>VST 견적요청 메일 작성기</title>
 <style>
 :root{
+  color-scheme:light dark;
   --bg:#f4f5f7; --panel:#ffffff; --ink:#1b2330; --muted:#5d6878; --line:#d9dee6;
   --accent:#1f4e9c; --accent-ink:#ffffff; --soft:#eaf0fa;
   --bad:#b3261e; --bad-bg:#fdecea; --warn:#8a5a00; --warn-bg:#fff4d6; --ok:#1b6b3a; --ok-bg:#e5f5ea;
@@ -40,7 +41,7 @@ main{padding:16px;max-width:1400px;margin:0 auto}
 .fld label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:3px}
 .req{color:var(--bad)}
 .inrow{display:flex;gap:6px;align-items:center}
-input[type=text],input[type=email],select,textarea{width:100%;min-width:0;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=text],input[type=email],input[type=date],select,textarea{width:100%;min-width:0;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
 .item{border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px;background:var(--soft)}
 .item .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:600}
@@ -63,9 +64,10 @@ textarea{resize:vertical;font-family:inherit;line-height:1.6}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
 th{color:var(--muted);font-weight:600;white-space:nowrap}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+#toast{max-width:90vw;text-align:center;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
 #toast.show{opacity:1}
 [hidden]{display:none!important}
+@media (max-width:980px){input,select,textarea{font-size:16px}}
 </style>
 </head>
 <body>
@@ -140,7 +142,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
   <option value="SEMV (삼성전기, 타이응우옌)"><option value="SEHC (호치민)">
 </datalist>
 <datalist id="units"><option value="EA"><option value="SET"><option value="PAC"><option value="대"><option value="BOX"><option value="M"></datalist>
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 const UNK = '미확인';
@@ -149,13 +151,15 @@ ko:{
  v_contact:'공급사 이메일 또는 전화', v_contact_hint:'* 공급사명은 필수, 이메일과 전화는 둘 중 하나 이상 필수입니다.', c_cat:'카탈로그 등재 여부', c_link:'카탈로그 링크·파일명', c_yes:'카탈로그에 있음', c_no:'카탈로그에 없음', c_unk:'미확인',
  sec_att:'4-2. 첨부할 자료', sec_att_d:'체크하면 메일에 "첨부 자료" 문구가 들어갑니다. Gmail 창에서 파일은 직접 붙여야 합니다.',
  at_spec:'고객 요청 사양서', at_photo:'현품 사진', at_catalog:'카탈로그 해당 페이지', att_q:'체크한 첨부 파일을 Gmail 창에 직접 붙이셔야 합니다. 계속할까요?',
+ f_files:'파일 선택 (사진, PDF, 엑셀 등. 이 화면에서 Gmail로 자동 첨부되지는 않습니다)', att_nofile:'첨부 자료를 체크했지만 선택된 파일이 없음',
+ v_past:'회신 확인일이 오늘보다 이전입니다', v_qty:'수량은 0보다 큰 숫자여야 합니다', v_email:'공급사 이메일 형식이 올바르지 않습니다', toast_fail:'복사에 실패했습니다. 본문을 직접 선택해 복사해 주세요',
  f_replyBy:'회신 확인일', fu_title:'회신 확인용 (발송 후 사용)', fu_d:'회신이 없을 때 직원이 전화로 확인하는 스크립트와 독촉 메일 초안입니다. 공급사에 자동 발송되지 않습니다.',
  fu_call:'전화 확인 스크립트', fu_nudge:'독촉 메일 초안', b_copycall:'스크립트 복사', b_copynudge:'독촉 메일 복사',
  f_supTel:'공급사 전화', sup_pick:'저장된 공급사 선택', sup_saved:'공급사 주소록', sup_save:'이 공급사 저장', sup_add:'+ 공급사 추가',
  sup_title:'공급사 주소록', sup_d:'담당자·이메일은 확인되는 대로 채워 주세요. 작성 화면에서 고르면 자동으로 들어갑니다. 이 브라우저에만 저장됩니다.',
  title:'VST 견적요청 메일 작성기', tab_write:'작성', tab_hist:'기록', tab_set:'설정',
  sec_req:'1. 삼성 요청 정보 (내부 기록)',
- sec_req_d:'여기 내용은 5번 "공개 범위"에서 켜지 않으면 공급사 메일에 들어가지 않습니다. 모르는 값은 비워 두지 말고 "미확인"을 누르세요.',
+ sec_req_d:'삼성 법인·공장, 부서, 삼성 코드, 최종 고객명은 5번에서 켜지 않으면 메일에 들어가지 않습니다. 단 용도, 연간 수요, 요청 납기는 항상 메일에 들어갑니다. 모르는 값은 비워 두지 말고 "미확인"을 누르세요.',
  sec_sup:'2. 공급사', sec_items:'3. 품목', sec_ask:'4. 공급사에 요청할 사항', sec_opt:'5. 문구와 공개 범위',
  f_staff:'담당 직원', f_site:'삼성 법인·공장', f_dept:'사용 부서', f_sPic:'삼성 담당자', f_purpose:'용도',
  f_needBy:'삼성 요청 납기', f_repeat:'연간 예상 수요', f_memo:'내부 메모',
@@ -188,37 +192,39 @@ ko:{
 vi:{
  v_contact:'Email hoặc điện thoại NCC', v_contact_hint:'* Bắt buộc có tên NCC và ít nhất một trong hai: email hoặc điện thoại.', c_cat:'Có trong catalog không', c_link:'Link / tên file catalog', c_yes:'Có trong catalog', c_no:'Không có trong catalog', c_unk:'Chưa xác nhận',
  sec_att:'4-2. Tài liệu đính kèm', sec_att_d:'Tích chọn sẽ thêm câu "Tài liệu đính kèm" vào email. Phải tự đính kèm file trong cửa sổ Gmail.',
- at_spec:'Bản yêu cầu của khách', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
+ at_spec:'Bản yêu cầu kỹ thuật của khách hàng', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
+ f_files:'Chọn file (ảnh, PDF, Excel... Trang này không tự đính kèm vào Gmail)', att_nofile:'Đã tích chọn tài liệu đính kèm nhưng chưa chọn file nào',
+ v_past:'Ngày kiểm tra phản hồi đã qua', v_qty:'Số lượng phải là số lớn hơn 0', v_email:'Email NCC không đúng định dạng', toast_fail:'Sao chép thất bại. Hãy tự chọn và sao chép nội dung email',
  f_replyBy:'Ngày kiểm tra phản hồi', fu_title:'Kiểm tra phản hồi (dùng sau khi gửi)', fu_d:'Kịch bản gọi điện và email nhắc khi NCC chưa trả lời. Không tự động gửi cho NCC.',
  fu_call:'Kịch bản gọi điện', fu_nudge:'Email nhắc phản hồi', b_copycall:'Sao chép kịch bản', b_copynudge:'Sao chép email nhắc',
  f_supTel:'Điện thoại NCC', sup_pick:'Chọn NCC đã lưu', sup_saved:'Danh bạ NCC', sup_save:'Lưu NCC này', sup_add:'+ Thêm NCC',
  sup_title:'Danh bạ nhà cung cấp', sup_d:'Điền người phụ trách và email khi có thông tin. Chọn ở màn hình soạn sẽ tự điền. Chỉ lưu trên trình duyệt này.',
- title:'Công cụ soạn email yêu cầu báo giá VST', tab_write:'Soạn', tab_hist:'Lịch sử', tab_set:'Cài đặt',
+ title:'Soạn email yêu cầu báo giá (VST)', tab_write:'Soạn', tab_hist:'Lịch sử', tab_set:'Cài đặt',
  sec_req:'1. Thông tin yêu cầu từ Samsung (nội bộ)',
- sec_req_d:'Nội dung này không đưa vào email gửi nhà cung cấp, trừ khi bật ở mục 5 "Phạm vi công khai". Nếu chưa biết, đừng để trống mà hãy bấm "Chưa xác nhận".',
+ sec_req_d:'Pháp nhân/nhà máy, bộ phận, mã Samsung và tên khách hàng cuối chỉ vào email khi bật ở mục 5. Tuy nhiên mục đích, nhu cầu hằng năm và hạn giao hàng luôn có trong email. Nếu chưa biết, đừng để trống mà hãy bấm "Chưa rõ".',
  sec_sup:'2. Nhà cung cấp', sec_items:'3. Hạng mục', sec_ask:'4. Nội dung yêu cầu nhà cung cấp', sec_opt:'5. Câu chữ và phạm vi công khai',
- f_staff:'Nhân viên phụ trách', f_site:'Pháp nhân / nhà máy Samsung', f_dept:'Bộ phận sử dụng', f_sPic:'Người phụ trách phía Samsung', f_purpose:'Mục đích',
+ f_staff:'Nhân viên phụ trách', f_site:'Pháp nhân / nhà máy Samsung', f_dept:'Bộ phận sử dụng', f_sPic:'Đầu mối phía Samsung', f_purpose:'Mục đích',
  f_needBy:'Hạn giao hàng Samsung yêu cầu', f_repeat:'Nhu cầu dự kiến hằng năm', f_memo:'Ghi chú nội bộ',
  f_supName:'Tên nhà cung cấp', f_supPic:'Người phụ trách NCC', f_supEmail:'Email NCC',
  ph_needBy:'VD: 2026-12-20', ph_repeat:'VD: 2 lần/năm, mỗi lần 500 cái',
  p_new:'Thiết bị / dự án mới', p_maint:'Thay thế bảo trì định kỳ', p_cons:'Vật tư tiêu hao mua lặp lại', p_sample:'Mẫu / thử nghiệm',
- i_name:'Tên hàng', i_model:'Model / mã hàng', i_spec:'Quy cách (vật liệu, xử lý bề mặt, điện áp...)', i_qty:'Số lượng', i_unit:'Đơn vị',
+ i_name:'Tên hàng', i_model:'Model / mã hàng', i_spec:'Quy cách (vật liệu, xử lý bề mặt, điện áp...)', i_qty:'Số lượng', i_unit:'Đơn vị tính',
  i_code:'Mã Samsung', i_moq:'MOQ (chưa biết thì để trống → hỏi trong email)', i_ms:'Model / mã hàng hoặc quy cách',
- add_item:'+ Thêm hạng mục', unk:'Chưa xác nhận', item:'Hạng mục',
- a_quote:'Báo giá (đơn giá, tiền tệ, hiệu lực)', a_moq:'MOQ, quy cách đóng gói', a_lead:'Thời gian giao hàng', a_pay:'Điều kiện thanh toán',
+ add_item:'+ Thêm hạng mục', unk:'Chưa rõ', item:'Hạng mục',
+ a_quote:'Báo giá (đơn giá, tiền tệ, thời hạn hiệu lực)', a_moq:'MOQ, quy cách đóng gói', a_lead:'Thời gian giao hàng', a_pay:'Điều kiện thanh toán',
  a_inco:'Điều kiện giao hàng (Incoterms)', a_doc:'Tài liệu kỹ thuật, bản vẽ', a_war:'Chính sách bảo hành', a_hs:'Mã HS xuất khẩu',
  a_co:'Chứng nhận xuất xứ (C/O)', a_cq:'Chứng nhận chất lượng (C/Q)', a_spare:'Báo giá vật tư tiêu hao, phụ tùng',
  f_intro:'Đoạn giới thiệu công ty', in_A:'Nhấn mạnh thành tích', in_B:'Nhấn mạnh ban lãnh đạo', in_C:'Cả hai',
- f_prot:'Yêu cầu đăng ký / bảo vệ dự án', pr_none:'Không đưa vào', pr_ask:'Yêu cầu', pr_strong:'Mạnh (không thỏa thuận được sẽ xem xét hãng khác)',
+ f_prot:'Yêu cầu đăng ký / bảo vệ dự án', pr_none:'Không đưa vào', pr_ask:'Đề nghị', pr_strong:'Cứng rắn (xem xét hãng khác nếu không thỏa thuận)',
  o_samsung:'Nêu tên khách hàng cuối (Samsung)', o_dept:'Công khai nhà máy / bộ phận', o_code:'Công khai mã Samsung',
  out_mail:'Xem trước email', out_subj:'Tiêu đề', out_note:'Có thể sửa trực tiếp. Khi thay đổi biểu mẫu bên trái, email sẽ được tạo lại, nên hãy sửa sau cùng.',
  out_int:'Ghi chép nội bộ', out_int_d:'Bản tóm tắt để báo cáo. Không gửi cho nhà cung cấp.',
- b_copy:'Sao chép nội dung', b_gmail:'Mở trong Gmail', b_save:'Lưu', b_new:'Soạn mới', b_copyint:'Sao chép ghi chép nội bộ',
+ b_copy:'Sao chép nội dung email', b_gmail:'Mở trong Gmail', b_save:'Lưu bản ghi', b_new:'Soạn mới', b_copyint:'Sao chép ghi chép nội bộ',
  v_missing:'Thông tin bắt buộc còn thiếu', v_unk:'Mục chưa xác nhận (cập nhật khi có thông tin)', v_ok:'Đã đủ thông tin bắt buộc.',
  v_block:'Phải điền đủ hoặc đánh dấu "Chưa xác nhận" thì mới sao chép / lưu được email.',
  toast_copied:'Đã sao chép', toast_gmail:'Đã sao chép nội dung. Hãy dán vào cửa sổ Gmail.', toast_saved:'Đã lưu',
  h_date:'Ngày', h_staff:'Nhân viên', h_sup:'NCC', h_items:'Hạng mục', h_where:'Nơi sử dụng', h_unk:'Chưa xác nhận',
- b_load:'Mở', b_del:'Xóa', b_csv:'Xuất CSV', hist_empty:'Chưa có bản ghi nào.',
+ b_load:'Nạp vào form', b_del:'Xóa', b_csv:'Xuất CSV', hist_empty:'Chưa có bản ghi nào.',
  hist_note:'Bản ghi chỉ lưu trên trình duyệt này. Muốn chia sẻ sang máy khác, hãy xuất CSV.',
  del_q:'Xóa bản ghi này?', new_q:'Xóa nội dung đang soạn và bắt đầu lại?',
  set_d:'Dùng cho phần mở đầu và chữ ký email. Nhập một lần, lưu trên trình duyệt này.',
@@ -234,6 +240,7 @@ const store = {
 };
 const $ = s => document.querySelector(s);
 let lang = store.get('vst_rfq_lang','ko');
+if(!L[lang]) lang='ko';
 const t = k => (L[lang][k] ?? L.ko[k] ?? k);
 
 // 공개 배포용: 회사·인물·고객·매출 정보는 코드에 넣지 않는다. 설정 탭에서 각자 브라우저에 입력한다.
@@ -242,18 +249,33 @@ const SET_DEFAULT = {company:'Vina Solutions., JSC (VST)', sender:'', role:'영�
 let SET = Object.assign({}, SET_DEFAULT, store.get('vst_rfq_set',{}));
 // 공급사 주소록. 공개 배포용이라 비워 둔다. 설정 탭에서 추가하면 각자 브라우저에 저장된다.
 const SUP_SEED = [];
-let SUP = store.get('vst_rfq_sup',null) || SUP_SEED;
+let SUP = store.get('vst_rfq_sup',null);
+SUP = Array.isArray(SUP) ? SUP.filter(x=>x&&typeof x==='object') : SUP_SEED;
 const saveSup = () => store.set('vst_rfq_sup',SUP);
 function addBizDays(n){ const d=new Date(); while(n>0){ d.setDate(d.getDate()+1); const w=d.getDay(); if(w!==0&&w!==6) n--; }
-  const p=x=>String(x).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  return ymd(d); }
 const newItem = () => ({name:'',model:'',spec:'',qty:'',unit:'EA',code:'',moq:'',cat:'',catLink:''});
 const blank = () => ({staff:'',site:'',dept:'',sPic:'',purpose:'',needBy:'',repeat:'',memo:'',
   supName:'',supPic:'',supEmail:'', items:[newItem()],
   asks:{quote:true,moq:true,lead:true,pay:true,inco:false,doc:false,war:false,hs:true,co:true,cq:true,spare:false},
-  intro:'A', prot:'ask', oSamsung:true, oDept:false, oCode:false,
+  intro:'A', prot:'ask', oSamsung:false, oDept:false, oCode:false,
   att:{spec:false,photo:false,catalog:false}, replyBy:addBizDays(3)});
-let S = Object.assign(blank(), store.get('vst_rfq_draft',{}));
-if(!Array.isArray(S.items) || !S.items.length) S.items=[newItem()];
+// 저장된 구버전·손상 데이터를 안전하게 정리한다.
+function normalize(o){
+  const r=Object.assign(blank(), (o&&typeof o==='object'&&!Array.isArray(o))?o:{});
+  r.items=(Array.isArray(r.items)?r.items:[]).filter(x=>x&&typeof x==='object').map(x=>Object.assign(newItem(),x));
+  if(!r.items.length) r.items=[newItem()];
+  r.asks=Object.assign(blank().asks,(r.asks&&typeof r.asks==='object')?r.asks:{});
+  r.att=Object.assign(blank().att,(r.att&&typeof r.att==='object')?r.att:{});
+  if(!['new','maint','cons','sample'].includes(r.purpose)) r.purpose='';
+  if(!['A','B','C'].includes(r.intro)) r.intro='A';
+  if(!['none','ask','strong'].includes(r.prot)) r.prot='ask';
+  return r;
+}
+let S = normalize(store.get('vst_rfq_draft',{}));
+function ymd(d){ const p=x=>String(x).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+const dateOf = ts => { const d=ts?new Date(ts):null; return d&&!isNaN(d)?ymd(d):''; };
+const sentDate = s => dateOf(s.ts)||ymd(new Date());
 
 function el(tag, attrs, ...kids){
   const e=document.createElement(tag);
@@ -281,7 +303,7 @@ function field(obj, key, labelKey, o={}){
   inp.value = obj[key] ?? '';
   inp.addEventListener('input',()=>{ obj[key]=inp.value; (o.after||refresh)(); });
   const row=el('div',{class:'inrow'},inp);
-  if(o.unk) row.append(el('button',{type:'button',class:'chip',onclick:()=>{ inp.value=obj[key]=UNK; refresh(); }},t('unk')));
+  if(o.unk) row.append(el('button',{type:'button',class:'chip','aria-label':t('unk')+': '+t(labelKey),onclick:()=>{ inp.value=obj[key]=UNK; refresh(); }},t('unk')));
   return el('div',{class:'fld'+(o.wide?' wide':'')},
     el('label',{for:id}, t(labelKey), o.req?el('span',{class:'req'},' *'):''), row);
 }
@@ -294,6 +316,17 @@ function card(titleKey, descKey, ...kids){
   return el('div',{class:'card'}, el('h2',null,t(titleKey)), descKey?el('p',{class:'d'},t(descKey)):'', kids);
 }
 
+let FILES=[]; // 첨부 파일은 메모리에만 둔다(브라우저 저장소 용량 때문). 새로고침하면 다시 골라야 한다.
+function renderFiles(){
+  const w=$('#fileList'); if(!w) return; w.textContent='';
+  FILES.forEach((f,i)=>{
+    const row=el('div',{class:'inrow',style:'margin:4px 0'});
+    if(f.type.startsWith('image/')) row.append(el('img',{src:URL.createObjectURL(f),alt:'',style:'width:48px;height:48px;object-fit:cover;border-radius:4px'}));
+    row.append(el('span',{style:'flex:1;word-break:break-all'},`${f.name} (${Math.ceil(f.size/1024)} KB)`),
+      el('button',{type:'button',class:'x',onclick:()=>{ FILES.splice(i,1); renderFiles(); refresh(); }},'×'));
+    w.append(row);
+  });
+}
 function renderForm(){
   const f=$('#form'); f.textContent='';
   f.append(card('sec_req','sec_req_d', el('div',{class:'fields'},
@@ -339,8 +372,13 @@ function renderForm(){
     el('button',{type:'button',onclick:()=>{ S.items.push(newItem()); renderForm(); refresh(); }},t('add_item'))));
   f.append(card('sec_ask',null, el('div',{class:'checks'},
     Object.keys(blank().asks).map(k=>check(S.asks,k,'a_'+k)))));
+  const fi=el('input',{type:'file',multiple:'',accept:'image/*,.pdf,.xlsx,.xls,.doc,.docx',onchange:()=>{
+    FILES.push(...fi.files); fi.value=''; renderFiles(); refresh(); }});
   f.append(card('sec_att','sec_att_d', el('div',{class:'checks'},
-    ['spec','photo','catalog'].map(k=>check(S.att,k,'at_'+k)))));
+    ['spec','photo','catalog'].map(k=>check(S.att,k,'at_'+k))),
+    el('div',{class:'fld',style:'margin-top:10px'},el('label',null,t('f_files')),fi),
+    el('div',{id:'fileList'})));
+  renderFiles();
   f.append(card('sec_opt',null,
     el('div',{class:'fields'},
       field(S,'intro','f_intro',{opts:['A','B','C'],op:'in_',noEmpty:1}),
@@ -372,16 +410,23 @@ const known = v => has(v) && String(v).trim()!==UNK;
 function validate(s=S){
   const miss=[], unk=[];
   const chk=(v,label)=>{ if(!has(v)) miss.push(label); else if(!known(v)) unk.push(label); };
+  // 메일 본문에 그대로 들어가는 값은 "미확인"도 허용하지 않는다.
+  const hard=(v,label)=>{ if(!known(v)) miss.push(label); };
   chk(s.staff,t('f_staff')); chk(s.site,t('f_site')); chk(s.dept,t('f_dept'));
-  chk(s.purpose,t('f_purpose')); chk(s.needBy,t('f_needBy')); chk(s.supName,t('f_supName'));
+  chk(s.purpose,t('f_purpose')); chk(s.needBy,t('f_needBy')); hard(s.supName,t('f_supName'));
   const ct=[s.supEmail,s.supTel];
+  if(known(s.supEmail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s.supEmail).trim())) miss.push(t('v_email'));
+  if(s===S && has(s.replyBy) && s.replyBy<ymd(new Date())) unk.push(t('v_past'));
   if(!ct.some(has)) miss.push(t('v_contact')); else if(!ct.some(known)) unk.push(t('v_contact'));
   if(!has(s.replyBy)) miss.push(t('f_replyBy'));
+  if(s===S && Object.values(s.att||{}).some(Boolean) && !FILES.length) unk.push(t('att_nofile'));
   s.items.forEach((it,i)=>{
     const p=t('item')+' '+(i+1)+' – ';
-    chk(it.name,p+t('i_name'));
+    hard(it.name,p+t('i_name'));
     if(!has(it.model)&&!has(it.spec)) miss.push(p+t('i_ms'));
-    chk(it.qty,p+t('i_qty')); chk(it.code,p+t('i_code'));
+    hard(it.qty,p+t('i_qty'));
+    if(known(it.qty) && !(Number(String(it.qty).replace(/,/g,''))>0)) miss.push(p+t('v_qty'));
+    chk(it.code,p+t('i_code'));
     if(!has(it.cat)) miss.push(p+t('c_cat')); else if(it.cat==='unk') unk.push(p+t('c_cat'));
   });
   if(!has(SET.sender)) miss.push(t('s_sender'));
@@ -400,7 +445,7 @@ function buildMail(s){
   const noCat=s.items.some(it=>it.cat==='no'||it.cat==='unk');
   const cust = s.oSamsung ? '삼성 베트남' : '베트남 현지 고객사';
   const where = (s.oSamsung && s.oDept) ? [known(s.site)?s.site:'', known(s.dept)?s.dept:''].filter(Boolean).join(' ') : '';
-  P.push(`${has(s.supName)?s.supName:'○○'} ${has(s.supPic)?s.supPic+'님':'담당자님'}께,`);
+  P.push(`${has(s.supName)?s.supName:'○○'} ${known(s.supPic)?s.supPic+'님':'담당자님'}께,`);
   P.push('안녕하십니까.');
   P.push(`저는 베트남 하노이에 소재한 ${c.company}에서 ${has(c.role)?c.role+' 업무를 담당하고 있는 ':''}${c.sender}입니다.`);
   if(s.intro==='A'||s.intro==='C')
@@ -408,7 +453,7 @@ function buildMail(s){
       + (has(c.revenue)?` 지난해 연간 매출은 ${c.revenue}입니다.`:''));
   if(s.intro==='B'||s.intro==='C'){
     const who=[has(c.ceo)?c.ceo+' 대표이사':'', has(c.director)?c.director+' 이사':''].filter(Boolean).join('와 ');
-    P.push(`당사는 ${who?who+'가 경영하고 있으며, ':''}경영진은 과거 삼성에서 관리·경영직을 역임하였습니다. 이러한 경험을 바탕으로 한국 브랜드의 설비와 제품을 우선적으로 검토하고 협력을 추진하고 있습니다.`);
+    P.push(`당사는 ${who?who+'가 경영하고 있으며, ':''}${s.oSamsung?'경영진은 과거 삼성에서 관리·경영직을 역임하였습니다. 이러한 경험을 바탕으로 ':''}한국 브랜드의 설비와 제품을 우선적으로 검토하고 협력을 추진하고 있습니다.`);
   }
   P.push(`현재 ${cust}${where?' '+where:''} 프로젝트와 관련하여 아래 제품의 구매를 검토하고 있으며, ${noCat?'귀사로부터 취급 여부 확인과 함께 견적 및 기술 상담을 받고자 합니다.':'귀사로부터 직접 견적과 기술 상담을 받고자 합니다.'}`);
   const lines=s.items.map((it,i)=>{
@@ -424,7 +469,8 @@ function buildMail(s){
   P.push(lines.join('\n'));
   const at=s.att||{};
   const atl=[at.spec&&'고객 요청 사양서',at.photo&&'현품 사진',at.catalog&&'카탈로그 해당 페이지'].filter(Boolean);
-  if(atl.length) P.push('첨부 자료: '+atl.join(', ')+'\n(메일에 첨부하였으니 확인 부탁드립니다.)');
+  const fn=FILES.map(f=>f.name);
+  if(atl.length||fn.length) P.push('첨부 자료: '+atl.join(', ')+(fn.length?'\n첨부 파일: '+fn.join(', '):'')+'\n(메일에 첨부하였으니 확인 부탁드립니다.)');
   const ex=[];
   if(s.purpose==='maint') ex.push('해당 제품은 정기 유지보수 시 교체용으로 사용될 예정이므로, 실제 수요는 상기 수량보다 증가할 수 있습니다.');
   if(s.purpose==='cons') ex.push('해당 제품은 반복 구매가 예상되는 소모성 품목입니다.');
@@ -451,7 +497,7 @@ function buildMail(s){
 }
 function buildInternal(s, v){
   const d=x=>has(x)?x:'(빈칸)';
-  const r=[`[견적요청 내부 기록] ${(s.ts||new Date().toISOString()).slice(0,10)}`,
+  const r=[`[견적요청 내부 기록] ${sentDate(s)}`,
     `담당 직원: ${d(s.staff)}`,
     `삼성 법인·공장: ${d(s.site)} / 사용 부서: ${d(s.dept)}${has(s.sPic)?' / 삼성 담당자: '+s.sPic:''}`,
     `용도: ${KO_PURPOSE[s.purpose]||'(빈칸)'} / 삼성 요청 납기: ${d(s.needBy)}${has(s.repeat)?' / 연간 수요: '+s.repeat:''}`,
@@ -469,7 +515,7 @@ function buildInternal(s, v){
 
 function itemNames(s){ return s.items.map(it=>[it.name,it.model].filter(has).join(' ')).join(', '); }
 function buildCall(s){
-  const c=SET, sent=(s.ts||new Date().toISOString()).slice(0,10);
+  const c=SET, sent=sentDate(s);
   const q=['메일을 받으셨는지 확인','담당자와 회신 가능한 날짜 확인'];
   if(s.items.some(it=>it.cat==='no'||it.cat==='unk')) q.push('카탈로그에서 확인되지 않은 품목의 취급 여부와 대체 모델 확인');
   if(s.items.some(it=>!has(it.moq))) q.push('MOQ와 포장 단위 문의');
@@ -481,9 +527,9 @@ function buildCall(s){
     '통화 결과: (날짜 / 통화한 사람 / 회신 예정일)'].join('\n');
 }
 function buildNudge(s){
-  const c=SET, sent=(s.ts||new Date().toISOString()).slice(0,10);
+  const c=SET, sent=sentDate(s);
   return [`제목: [회신 요청] ${itemNames(s)} 견적 요청 건 - ${c.company}`,'',
-    `${has(s.supName)?s.supName:'○○'} ${has(s.supPic)?s.supPic+'님':'담당자님'}께,`,'','안녕하십니까.',
+    `${has(s.supName)?s.supName:'○○'} ${known(s.supPic)?s.supPic+'님':'담당자님'}께,`,'','안녕하십니까.',
     `${c.company}의 ${c.sender||''}입니다.`,'',
     `${sent}에 보내드린 ${itemNames(s)} 견적 요청 건과 관련하여 확인 차 다시 연락드립니다.`,
     '검토 상황과 회신 가능한 일정을 알려 주시면 감사하겠습니다. 추가로 필요한 정보가 있으면 말씀해 주십시오.','','감사합니다.','',
@@ -497,7 +543,7 @@ function refresh(){
   else box.append(el('div',{class:'box ok'},t('v_ok')));
   if(v.unk.length) box.append(el('div',{class:'box warn'},el('b',null,t('v_unk')),list(v.unk)));
   const blocked=v.miss.length>0;
-  ['#bCopy','#bGmail','#bSave'].forEach(q=>$(q).disabled=blocked);
+  ['#bCopy','#bGmail','#bSave','#bCopyCall','#bCopyNudge'].forEach(q=>$(q).disabled=blocked);
   $('#blockNote').hidden=!blocked;
   $('#mailSubj').value=buildSubject(S);
   $('#mailBody').value=buildMail(S);
@@ -508,13 +554,22 @@ function refresh(){
 
 function toast(msg){ const e=$('#toast'); e.textContent=msg; e.classList.add('show'); clearTimeout(toast.h); toast.h=setTimeout(()=>e.classList.remove('show'),2200); }
 async function copy(text){
-  try{ await navigator.clipboard.writeText(text); }
-  catch(e){ const a=el('textarea'); a.value=text; document.body.append(a); a.select(); document.execCommand('copy'); a.remove(); }
+  try{ await navigator.clipboard.writeText(text); return true; }
+  catch(e){ const a=el('textarea'); a.value=text; document.body.append(a); a.select(); let ok=false;
+    try{ ok=document.execCommand('copy'); }catch(_){} a.remove(); return ok; }
 }
-const getHist = () => store.get('vst_rfq_hist',[]);
+// 클릭 시점에도 필수 검증을 다시 한다(버튼 잠금 우회 방지).
+const guard = () => { if(validate().miss.length){ toast(t('v_block')); return false; } return true; };
+const attOK = () => !(FILES.length||Object.values(S.att||{}).some(Boolean)) || confirm(t('att_q')+'\n\n'+FILES.map(f=>'• '+f.name).join('\n'));
+const doneCopy = ok => toast(ok?t('toast_copied'):t('toast_fail'));
+const getHist = () => { const h=store.get('vst_rfq_hist',[]);
+  return Array.isArray(h) ? h.filter(r=>r&&typeof r==='object').map(r=>Object.assign({},r,{items:Array.isArray(r.items)?r.items.filter(x=>x&&typeof x==='object'):[]})) : []; };
 function saveRecord(){
   const rec=JSON.parse(JSON.stringify(S));
-  rec.ts=new Date().toISOString(); rec.id=rec.id||('r'+Date.now());
+  // 같은 공급사로 다시 저장할 때만 덮어쓴다. 공급사를 바꾸면 새 기록이 된다.
+  const old=S.id?getHist().find(x=>x.id===S.id):null;
+  rec.ts=new Date().toISOString();
+  rec.id=(old&&old.supName===S.supName)?S.id:('r'+Date.now()+Math.random().toString(36).slice(2,6));
   rec.subject=$('#mailSubj').value; rec.mail=$('#mailBody').value;
   const h=getHist().filter(x=>x.id!==rec.id); h.unshift(rec); store.set('vst_rfq_hist',h);
   S.id=rec.id; store.set('vst_rfq_draft',S);
@@ -528,22 +583,24 @@ function renderHist(){
   h.forEach(r=>{
     const v=validate(r);
     body.append(el('tr',null,
-      el('td',null,(r.ts||'').slice(0,10)), el('td',null,r.staff||''), el('td',null,r.supName||''),
+      el('td',null,dateOf(r.ts)), el('td',null,r.staff||''), el('td',null,r.supName||''),
       el('td',null,r.items.map(it=>`${[it.name,it.model].filter(has).join(' ')} × ${fmtQty(it.qty)}`).join(', ')),
       el('td',null,[r.site,r.dept].filter(has).join(' / ')),
       el('td',null,v.unk.join(', ')),
       el('td',{style:'white-space:nowrap'},
-        el('button',{onclick:()=>{ S=Object.assign(blank(),JSON.parse(JSON.stringify(r))); renderForm(); refresh(); showTab('write'); }},t('b_load')),' ',
+        el('button',{onclick:()=>{ const c=normalize(JSON.parse(JSON.stringify(r))); ['id','ts','mail','subject'].forEach(k=>delete c[k]); c.replyBy=addBizDays(3);
+          S=c; FILES=[]; renderForm(); refresh(); showTab('write'); }},t('b_load')),' ',
         el('button',{class:'x',onclick:()=>{ if(confirm(t('del_q'))){ store.set('vst_rfq_hist',getHist().filter(x=>x.id!==r.id)); renderHist(); } }},t('b_del')))));
   });
   tb.append(body); w.append(tb);
 }
 function exportCsv(){
-  const q=x=>'"'+String(x??'').replace(/"/g,'""')+'"';
-  const rows=[['날짜','담당 직원','삼성 법인·공장','사용 부서','삼성 담당자','용도','삼성 요청 납기','연간 수요','공급사','공급사 담당자','공급사 이메일','품명','모델·품번','규격·사양','수량','단위','삼성 코드','MOQ','카탈로그','카탈로그 링크','회신 확인일','메모']];
-  getHist().forEach(r=>r.items.forEach(it=>rows.push([(r.ts||'').slice(0,10),r.staff,r.site,r.dept,r.sPic,KO_PURPOSE[r.purpose]||'',r.needBy,r.repeat,r.supName,r.supPic,r.supEmail,it.name,it.model,it.spec,it.qty,it.unit,it.code,it.moq,({yes:'있음',no:'없음',unk:'미확인'})[it.cat]||'',it.catLink,r.replyBy,r.memo])));
+  // 엑셀 수식 주입 방지: = + - @ 로 시작하는 셀 앞에 ' 를 붙인다.
+  const q=x=>{ let v=String(x??''); if(/^[=+\-@\t\r]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"'; };
+  const rows=[['날짜','담당 직원','삼성 법인·공장','사용 부서','삼성 담당자','용도','삼성 요청 납기','연간 수요','공급사','공급사 담당자','공급사 이메일','공급사 전화','품명','모델·품번','규격·사양','수량','단위','삼성 코드','MOQ','카탈로그','카탈로그 링크','회신 확인일','메모']];
+  getHist().forEach(r=>r.items.forEach(it=>rows.push([dateOf(r.ts),r.staff,r.site,r.dept,r.sPic,KO_PURPOSE[r.purpose]||'',r.needBy,r.repeat,r.supName,r.supPic,r.supEmail,r.supTel,it.name,it.model,it.spec,it.qty,it.unit,it.code,it.moq,({yes:'있음',no:'없음',unk:'미확인'})[it.cat]||'',it.catLink,r.replyBy,r.memo])));
   const blob=new Blob(['﻿'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
-  const a=el('a',{href:URL.createObjectURL(blob),download:'VST_견적요청_기록_'+new Date().toISOString().slice(0,10)+'.csv'});
+  const a=el('a',{href:URL.createObjectURL(blob),download:'VST_견적요청_기록_'+ymd(new Date())+'.csv'});
   document.body.append(a); a.click(); a.remove();
 }
 
@@ -561,18 +618,19 @@ function applyLang(){
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; store.set('vst_rfq_lang',lang); applyLang(); });
-$('#bCopy').onclick=async()=>{ await copy($('#mailBody').value); toast(t('toast_copied')); };
-$('#bCopyInt').onclick=async()=>{ await copy($('#intBody').value); toast(t('toast_copied')); };
-$('#bCopyCall').onclick=async()=>{ await copy($('#callBody').value); toast(t('toast_copied')); };
-$('#bCopyNudge').onclick=async()=>{ await copy($('#nudgeBody').value); toast(t('toast_copied')); };
+$('#bCopy').onclick=async()=>{ if(!guard()||!attOK()) return; doneCopy(await copy($('#mailBody').value)); };
+$('#bCopyInt').onclick=async()=>{ doneCopy(await copy($('#intBody').value)); };
+$('#bCopyCall').onclick=async()=>{ if(!guard()) return; doneCopy(await copy($('#callBody').value)); };
+$('#bCopyNudge').onclick=async()=>{ if(!guard()) return; doneCopy(await copy($('#nudgeBody').value)); };
 $('#bGmail').onclick=async()=>{
-  if(Object.values(S.att||{}).some(Boolean) && !confirm(t('att_q'))) return;
-  await copy($('#mailBody').value); saveRecord();
-  window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(/@/.test(S.supEmail||'')?S.supEmail:'')+'&su='+encodeURIComponent($('#mailSubj').value),'_blank','noopener');
-  toast(t('toast_gmail'));
+  if(!guard()||!attOK()) return;
+  // 팝업 차단을 피하려고 클릭 직후 동기적으로 먼저 연다.
+  window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.supEmail||'')?S.supEmail:'')+'&su='+encodeURIComponent($('#mailSubj').value),'_blank','noopener');
+  const ok=await copy($('#mailBody').value); saveRecord();
+  toast(ok?t('toast_gmail'):t('toast_fail'));
 };
-$('#bSave').onclick=()=>{ saveRecord(); toast(t('toast_saved')); };
-$('#bNew').onclick=()=>{ if(confirm(t('new_q'))){ const keep=S.staff; S=blank(); S.staff=keep; renderForm(); refresh(); } };
+$('#bSave').onclick=()=>{ if(!guard()) return; saveRecord(); toast(t('toast_saved')); };
+$('#bNew').onclick=()=>{ if(confirm(t('new_q'))){ const keep=S.staff; S=blank(); FILES=[]; S.staff=keep; renderForm(); refresh(); } };
 $('#bCsv').onclick=exportCsv;
 showTab('write'); applyLang();
 </script>
