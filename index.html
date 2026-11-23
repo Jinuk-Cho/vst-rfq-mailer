@@ -73,6 +73,7 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
 <body>
 <header>
   <h1 data-t="title"></h1>
+  <span id="who" class="note" style="font-weight:600"></span>
   <div class="tabs">
     <button data-tab="write" data-t="tab_write"></button>
     <button data-tab="hist" data-t="tab_hist"></button>
@@ -152,6 +153,7 @@ ko:{
  sec_att:'4-2. 첨부할 자료', sec_att_d:'체크하면 메일에 "첨부 자료" 문구가 들어갑니다. Gmail 창에서 파일은 직접 붙여야 합니다.',
  at_spec:'고객 요청 사양서', at_photo:'현품 사진', at_catalog:'카탈로그 해당 페이지', att_q:'체크한 첨부 파일을 Gmail 창에 직접 붙이셔야 합니다. 계속할까요?',
  f_files:'파일 선택 (사진, PDF, 엑셀 등. 이 화면에서 Gmail로 자동 첨부되지는 않습니다)', att_nofile:'첨부 자료를 체크했지만 선택된 파일이 없음',
+ who:'작성자', who_none:'미지정 (설정 탭에서 이름 입력)', v_author:'작성자와 서명 이름이 다릅니다 (서명은 설정의 발신자 이름)',
  v_past:'회신 확인일이 오늘보다 이전입니다', v_qty:'수량은 0보다 큰 숫자여야 합니다', v_email:'공급사 이메일 형식이 올바르지 않습니다', toast_fail:'복사에 실패했습니다. 본문을 직접 선택해 복사해 주세요',
  f_replyBy:'회신 확인일', fu_title:'회신 확인용 (발송 후 사용)', fu_d:'회신이 없을 때 직원이 전화로 확인하는 스크립트와 독촉 메일 초안입니다. 공급사에 자동 발송되지 않습니다.',
  fu_call:'전화 확인 스크립트', fu_nudge:'독촉 메일 초안', b_copycall:'스크립트 복사', b_copynudge:'독촉 메일 복사',
@@ -161,7 +163,7 @@ ko:{
  sec_req:'1. 삼성 요청 정보 (내부 기록)',
  sec_req_d:'삼성 법인·공장, 부서, 삼성 코드, 최종 고객명은 5번에서 켜지 않으면 메일에 들어가지 않습니다. 단 용도, 연간 수요, 요청 납기는 항상 메일에 들어갑니다. 모르는 값은 비워 두지 말고 "미확인"을 누르세요.',
  sec_sup:'2. 공급사', sec_items:'3. 품목', sec_ask:'4. 공급사에 요청할 사항', sec_opt:'5. 문구와 공개 범위',
- f_staff:'담당 직원', f_site:'삼성 법인·공장', f_dept:'사용 부서', f_sPic:'삼성 담당자', f_purpose:'용도',
+ f_staff:'작성자 (담당 직원)', f_site:'삼성 법인·공장', f_dept:'사용 부서', f_sPic:'삼성 담당자', f_purpose:'용도',
  f_needBy:'삼성 요청 납기', f_repeat:'연간 예상 수요', f_memo:'내부 메모',
  f_supName:'공급사명', f_supPic:'공급사 담당자', f_supEmail:'공급사 이메일',
  ph_needBy:'예: 2026-12-20', ph_repeat:'예: 연 2회, 회당 500개',
@@ -186,7 +188,7 @@ ko:{
  hist_note:'기록은 이 브라우저에만 저장됩니다. 다른 PC와 공유하려면 CSV로 내보내세요.',
  del_q:'이 기록을 삭제할까요?', new_q:'작성 중인 내용을 지우고 새로 시작할까요?',
  set_d:'메일 머리말과 서명에 쓰입니다. 한 번 입력하면 이 브라우저에 저장됩니다.',
- s_company:'회사명', s_sender:'발신자 이름', s_role:'담당 업무', s_tel:'전화', s_email:'이메일',
+ s_company:'회사명', s_sender:'작성자(발신자) 이름 - 서명과 기록에 사용', s_role:'담당 업무', s_tel:'전화', s_email:'이메일',
  s_ceo:'대표이사', s_director:'이사', s_customers:'주요 고객사', s_revenue:'연 매출 문구 (비우면 생략)'
 },
 vi:{
@@ -194,6 +196,7 @@ vi:{
  sec_att:'4-2. Tài liệu đính kèm', sec_att_d:'Tích chọn sẽ thêm câu "Tài liệu đính kèm" vào email. Phải tự đính kèm file trong cửa sổ Gmail.',
  at_spec:'Bản yêu cầu kỹ thuật của khách hàng', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
  f_files:'Chọn file (ảnh, PDF, Excel... Trang này không tự đính kèm vào Gmail)', att_nofile:'Đã tích chọn tài liệu đính kèm nhưng chưa chọn file nào',
+ who:'Người soạn', who_none:'Chưa chọn (nhập tên ở tab Cài đặt)', v_author:'Người soạn khác tên ký email (tên ký lấy từ Cài đặt)',
  v_past:'Ngày kiểm tra phản hồi đã qua', v_qty:'Số lượng phải là số lớn hơn 0', v_email:'Email NCC không đúng định dạng', toast_fail:'Sao chép thất bại. Hãy tự chọn và sao chép nội dung email',
  f_replyBy:'Ngày kiểm tra phản hồi', fu_title:'Kiểm tra phản hồi (dùng sau khi gửi)', fu_d:'Kịch bản gọi điện và email nhắc khi NCC chưa trả lời. Không tự động gửi cho NCC.',
  fu_call:'Kịch bản gọi điện', fu_nudge:'Email nhắc phản hồi', b_copycall:'Sao chép kịch bản', b_copynudge:'Sao chép email nhắc',
@@ -203,7 +206,7 @@ vi:{
  sec_req:'1. Thông tin yêu cầu từ Samsung (nội bộ)',
  sec_req_d:'Pháp nhân/nhà máy, bộ phận, mã Samsung và tên khách hàng cuối chỉ vào email khi bật ở mục 5. Tuy nhiên mục đích, nhu cầu hằng năm và hạn giao hàng luôn có trong email. Nếu chưa biết, đừng để trống mà hãy bấm "Chưa rõ".',
  sec_sup:'2. Nhà cung cấp', sec_items:'3. Hạng mục', sec_ask:'4. Nội dung yêu cầu nhà cung cấp', sec_opt:'5. Câu chữ và phạm vi công khai',
- f_staff:'Nhân viên phụ trách', f_site:'Pháp nhân / nhà máy Samsung', f_dept:'Bộ phận sử dụng', f_sPic:'Đầu mối phía Samsung', f_purpose:'Mục đích',
+ f_staff:'Người soạn (nhân viên phụ trách)', f_site:'Pháp nhân / nhà máy Samsung', f_dept:'Bộ phận sử dụng', f_sPic:'Đầu mối phía Samsung', f_purpose:'Mục đích',
  f_needBy:'Hạn giao hàng Samsung yêu cầu', f_repeat:'Nhu cầu dự kiến hằng năm', f_memo:'Ghi chú nội bộ',
  f_supName:'Tên nhà cung cấp', f_supPic:'Người phụ trách NCC', f_supEmail:'Email NCC',
  ph_needBy:'VD: 2026-12-20', ph_repeat:'VD: 2 lần/năm, mỗi lần 500 cái',
@@ -228,7 +231,7 @@ vi:{
  hist_note:'Bản ghi chỉ lưu trên trình duyệt này. Muốn chia sẻ sang máy khác, hãy xuất CSV.',
  del_q:'Xóa bản ghi này?', new_q:'Xóa nội dung đang soạn và bắt đầu lại?',
  set_d:'Dùng cho phần mở đầu và chữ ký email. Nhập một lần, lưu trên trình duyệt này.',
- s_company:'Tên công ty', s_sender:'Tên người gửi', s_role:'Công việc phụ trách', s_tel:'Điện thoại', s_email:'Email',
+ s_company:'Tên công ty', s_sender:'Tên người soạn/gửi - dùng cho chữ ký và bản ghi', s_role:'Công việc phụ trách', s_tel:'Điện thoại', s_email:'Email',
  s_ceo:'Tổng giám đốc', s_director:'Giám đốc', s_customers:'Khách hàng chính', s_revenue:'Doanh thu năm (để trống thì bỏ qua)'
 }};
 // 메일 본문은 UI 언어와 관계없이 항상 한국어로 만든다.
@@ -273,6 +276,8 @@ function normalize(o){
   return r;
 }
 let S = normalize(store.get('vst_rfq_draft',{}));
+// 작성자를 설정의 발신자 이름으로 자동 채운다(직접 바꿀 수도 있다).
+if(!String(S.staff||'').trim() && String(SET.sender||'').trim()) S.staff=SET.sender;
 function ymd(d){ const p=x=>String(x).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
 const dateOf = ts => { const d=ts?new Date(ts):null; return d&&!isNaN(d)?ymd(d):''; };
 const sentDate = s => dateOf(s.ts)||ymd(new Date());
@@ -389,7 +394,7 @@ function renderForm(){
 }
 function renderSet(){
   const f=$('#setForm'); f.textContent='';
-  const save=()=>{ store.set('vst_rfq_set',SET); refresh(); };
+  const save=()=>{ store.set('vst_rfq_set',SET); if(!has(S.staff)) S.staff=SET.sender; refresh(); };
   ['company','sender','role','tel','email','ceo','director','customers','revenue'].forEach(k=>
     f.append(field(SET,k,'s_'+k,{after:save, req:k==='sender'||k==='company'})));
   const w=$('#supList'); w.textContent='';
@@ -417,6 +422,7 @@ function validate(s=S){
   const ct=[s.supEmail,s.supTel];
   if(known(s.supEmail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s.supEmail).trim())) miss.push(t('v_email'));
   if(s===S && has(s.replyBy) && s.replyBy<ymd(new Date())) unk.push(t('v_past'));
+  if(s===S && known(s.staff) && has(SET.sender) && s.staff.trim()!==SET.sender.trim()) unk.push(t('v_author'));
   if(!ct.some(has)) miss.push(t('v_contact')); else if(!ct.some(known)) unk.push(t('v_contact'));
   if(!has(s.replyBy)) miss.push(t('f_replyBy'));
   if(s===S && Object.values(s.att||{}).some(Boolean) && !FILES.length) unk.push(t('att_nofile'));
@@ -537,6 +543,7 @@ function buildNudge(s){
 }
 function refresh(){
   store.set('vst_rfq_draft',S);
+  const who=$('#who'); who.textContent=t('who')+': '+(has(S.staff)?S.staff:t('who_none')); who.style.color=has(S.staff)?'':'var(--bad)';
   const v=validate(), box=$('#valid'); box.textContent='';
   const list=a=>el('ul',null,a.map(x=>el('li',null,x)));
   if(v.miss.length) box.append(el('div',{class:'box bad'},el('b',null,t('v_missing')),list(v.miss)));
@@ -608,6 +615,7 @@ function showTab(name){
   ['write','hist','set'].forEach(n=>{ $('#tab-'+n).hidden = n!==name; });
   document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
   if(name==='hist') renderHist();
+  if(name==='write' && typeof renderForm==='function' && $('#form').children.length) renderForm();
 }
 function applyLang(){
   document.documentElement.lang=lang;
