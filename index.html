@@ -120,7 +120,8 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
   </section>
   <section id="tab-hist" hidden>
     <div class="card">
-      <div class="btns" style="margin-top:0"><button id="bCsv" data-t="b_csv"></button></div>
+      <div class="btns" style="margin-top:0"><button id="bCsv" data-t="b_csv"></button> <button id="bShared" data-t="b_shared"></button></div>
+      <div class="tablewrap" id="shared"></div>
       <p class="d" data-t="hist_note"></p>
       <div class="tablewrap" id="hist"></div>
     </div>
@@ -135,6 +136,12 @@ th{color:var(--muted);font-weight:600;white-space:nowrap}
       <h2 data-t="sup_title"></h2>
       <p class="d" data-t="sup_d"></p>
       <div id="supList"></div>
+    </div>
+    <div class="card">
+      <h2 data-t="sync_title"></h2>
+      <p class="d" data-t="sync_d"></p>
+      <div class="fields" id="syncForm"></div>
+      <div class="btns"><button id="bSyncTest" data-t="b_synctest"></button></div>
     </div>
   </section>
 </main>
@@ -154,6 +161,9 @@ ko:{
  at_spec:'고객 요청 사양서', at_photo:'현품 사진', at_catalog:'카탈로그 해당 페이지', att_q:'체크한 첨부 파일을 Gmail 창에 직접 붙이셔야 합니다. 계속할까요?',
  f_files:'파일 선택 (사진, PDF, 엑셀 등. 이 화면에서 Gmail로 자동 첨부되지는 않습니다)', att_nofile:'첨부 자료를 체크했지만 선택된 파일이 없음',
  who:'작성자', who_none:'미지정 (설정 탭에서 이름 입력)', v_author:'작성자와 서명 이름이 다릅니다 (서명은 설정의 발신자 이름)',
+ sync_title:'공유 저장 (Google 시트)', sync_d:'저장할 때 요청 내용(공급사, 품목, 수량, 삼성 코드 등. 메일 본문 제외)이 관리자의 Google 시트에 한 줄씩 쌓입니다. 관리자에게 받은 URL과 비밀 문자열을 입력하세요. 비워 두면 이 PC에만 저장됩니다.',
+ s_syncUrl:'공유 저장 웹앱 URL', s_syncToken:'비밀 문자열', b_synctest:'연결 시험', b_shared:'전체 직원 기록 불러오기',
+ sync_ok:'공유 시트에 기록됨', sync_fail:'공유 시트 연결 실패 (이 PC에는 저장됨)', sync_loading:'불러오는 중…', sync_none:'설정 탭에서 공유 저장을 먼저 설정하세요', sync_test_ok:'연결 성공',
  v_past:'회신 확인일이 오늘보다 이전입니다', v_qty:'수량은 0보다 큰 숫자여야 합니다', v_email:'공급사 이메일 형식이 올바르지 않습니다', toast_fail:'복사에 실패했습니다. 본문을 직접 선택해 복사해 주세요',
  f_replyBy:'회신 확인일', fu_title:'회신 확인용 (발송 후 사용)', fu_d:'회신이 없을 때 직원이 전화로 확인하는 스크립트와 독촉 메일 초안입니다. 공급사에 자동 발송되지 않습니다.',
  fu_call:'전화 확인 스크립트', fu_nudge:'독촉 메일 초안', b_copycall:'스크립트 복사', b_copynudge:'독촉 메일 복사',
@@ -197,6 +207,9 @@ vi:{
  at_spec:'Bản yêu cầu kỹ thuật của khách hàng', at_photo:'Ảnh hàng thực tế', at_catalog:'Trang catalog liên quan', att_q:'Bạn phải tự đính kèm các file đã chọn trong cửa sổ Gmail. Tiếp tục?',
  f_files:'Chọn file (ảnh, PDF, Excel... Trang này không tự đính kèm vào Gmail)', att_nofile:'Đã tích chọn tài liệu đính kèm nhưng chưa chọn file nào',
  who:'Người soạn', who_none:'Chưa chọn (nhập tên ở tab Cài đặt)', v_author:'Người soạn khác tên ký email (tên ký lấy từ Cài đặt)',
+ sync_title:'Lưu chung (Google Sheets)', sync_d:'Khi lưu, nội dung yêu cầu (NCC, hàng hóa, số lượng, mã Samsung... không gồm nội dung email) được ghi thành từng dòng vào Google Sheets của quản trị viên. Nhập URL và chuỗi bí mật do quản trị viên cung cấp. Để trống thì chỉ lưu trên máy này.',
+ s_syncUrl:'URL ứng dụng lưu chung', s_syncToken:'Chuỗi bí mật', b_synctest:'Kiểm tra kết nối', b_shared:'Tải bản ghi của mọi nhân viên',
+ sync_ok:'Đã ghi vào bảng chung', sync_fail:'Kết nối bảng chung thất bại (đã lưu trên máy này)', sync_loading:'Đang tải…', sync_none:'Hãy cài đặt lưu chung ở tab Cài đặt trước', sync_test_ok:'Kết nối thành công',
  v_past:'Ngày kiểm tra phản hồi đã qua', v_qty:'Số lượng phải là số lớn hơn 0', v_email:'Email NCC không đúng định dạng', toast_fail:'Sao chép thất bại. Hãy tự chọn và sao chép nội dung email',
  f_replyBy:'Ngày kiểm tra phản hồi', fu_title:'Kiểm tra phản hồi (dùng sau khi gửi)', fu_d:'Kịch bản gọi điện và email nhắc khi NCC chưa trả lời. Không tự động gửi cho NCC.',
  fu_call:'Kịch bản gọi điện', fu_nudge:'Email nhắc phản hồi', b_copycall:'Sao chép kịch bản', b_copynudge:'Sao chép email nhắc',
@@ -248,7 +261,7 @@ const t = k => (L[lang][k] ?? L.ko[k] ?? k);
 
 // 공개 배포용: 회사·인물·고객·매출 정보는 코드에 넣지 않는다. 설정 탭에서 각자 브라우저에 입력한다.
 const SET_DEFAULT = {company:'Vina Solutions., JSC (VST)', sender:'', role:'영업 및 프로젝트 개발', tel:'', email:'',
-  ceo:'', director:'', customers:'', revenue:''};
+  ceo:'', director:'', customers:'', revenue:'', syncUrl:'', syncToken:''};
 let SET = Object.assign({}, SET_DEFAULT, store.get('vst_rfq_set',{}));
 // 공급사 주소록. 공개 배포용이라 비워 둔다. 설정 탭에서 추가하면 각자 브라우저에 저장된다.
 const SUP_SEED = [];
@@ -397,6 +410,8 @@ function renderSet(){
   const save=()=>{ store.set('vst_rfq_set',SET); if(!has(S.staff)) S.staff=SET.sender; refresh(); };
   ['company','sender','role','tel','email','ceo','director','customers','revenue'].forEach(k=>
     f.append(field(SET,k,'s_'+k,{after:save, req:k==='sender'||k==='company'})));
+  const sf=$('#syncForm'); sf.textContent='';
+  sf.append(field(SET,'syncUrl','s_syncUrl',{after:save,wide:1}), field(SET,'syncToken','s_syncToken',{after:save,type:'password'}));
   const w=$('#supList'); w.textContent='';
   SUP.forEach((x,i)=>{
     const upd=()=>saveSup();
@@ -580,6 +595,40 @@ function saveRecord(){
   rec.subject=$('#mailSubj').value; rec.mail=$('#mailBody').value;
   const h=getHist().filter(x=>x.id!==rec.id); h.unshift(rec); store.set('vst_rfq_hist',h);
   S.id=rec.id; store.set('vst_rfq_draft',S);
+  return rec;
+}
+// ---- 공유 저장 (Google 시트 / Apps Script) ----
+const syncOn = () => has(SET.syncUrl) && has(SET.syncToken) && /^https:\/\/script\.google(usercontent)?\.com\//.test(SET.syncUrl.trim());
+function toRows(rec){
+  const contact=[rec.supEmail,rec.supTel].filter(has).join(' / ');
+  const CN={yes:'있음',no:'없음',unk:'미확인'};
+  return rec.items.map((it,i)=>[rec.id,i+1,rec.ts,rec.staff||'',rec.supName||'',contact,rec.site||'',rec.dept||'',
+    it.name||'',it.model||'',it.spec||'',it.qty||'',it.unit||'',it.code||'',it.moq||'',CN[it.cat]||'',KO_PURPOSE[rec.purpose]||'',rec.needBy||'',rec.replyBy||'']);
+}
+// 반환: null = 공유 저장 미설정, true/false = 성공/실패
+async function syncRecord(rec){
+  if(!syncOn()) return null;
+  try{
+    const r=await fetch(SET.syncUrl.trim(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:SET.syncToken,rows:toRows(rec)})});
+    const j=await r.json(); return !!j.ok;
+  }catch(e){ return false; }
+}
+async function syncGet(action){
+  const r=await fetch(SET.syncUrl.trim()+'?action='+action+'&token='+encodeURIComponent(SET.syncToken));
+  const j=await r.json(); if(!j.ok) throw new Error(j.error||'fail'); return j;
+}
+async function loadShared(){
+  const box=$('#shared'); box.textContent='';
+  if(!syncOn()){ box.append(el('p',{class:'note'},t('sync_none'))); return; }
+  box.append(el('p',{class:'note'},t('sync_loading')));
+  try{
+    const j=await syncGet('list'); box.textContent='';
+    const cols=['작성일시','작성자','공급사','품명','수량','삼성 코드','회신 확인일','상태'].map(n=>j.head.indexOf(n));
+    if(!j.rows.length){ box.append(el('p',{class:'note'},t('hist_empty'))); return; }
+    box.append(el('table',null,
+      el('thead',null,el('tr',null,cols.map(i=>el('th',null,j.head[i])))),
+      el('tbody',null,j.rows.map(r=>el('tr',null,cols.map(i=>el('td',null,String(r[i]??''))))))));
+  }catch(e){ box.textContent=''; box.append(el('p',{class:'box bad'},t('sync_fail'))); }
 }
 function renderHist(){
   const w=$('#hist'), h=getHist(); w.textContent='';
@@ -634,10 +683,14 @@ $('#bGmail').onclick=async()=>{
   if(!guard()||!attOK()) return;
   // 팝업 차단을 피하려고 클릭 직후 동기적으로 먼저 연다.
   window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.supEmail||'')?S.supEmail:'')+'&su='+encodeURIComponent($('#mailSubj').value),'_blank','noopener');
-  const ok=await copy($('#mailBody').value); saveRecord();
+  const ok=await copy($('#mailBody').value); const rec=saveRecord();
   toast(ok?t('toast_gmail'):t('toast_fail'));
+  const s=await syncRecord(rec); if(s!==null) toast((ok?t('toast_gmail'):t('toast_fail'))+' · '+(s?t('sync_ok'):t('sync_fail')));
 };
-$('#bSave').onclick=()=>{ if(!guard()) return; saveRecord(); toast(t('toast_saved')); };
+$('#bSave').onclick=async()=>{ if(!guard()) return; const rec=saveRecord(); toast(t('toast_saved'));
+  const s=await syncRecord(rec); if(s!==null) toast(t('toast_saved')+' · '+(s?t('sync_ok'):t('sync_fail'))); };
+$('#bShared').onclick=loadShared;
+$('#bSyncTest').onclick=async()=>{ if(!syncOn()) return toast(t('sync_none')); try{ await syncGet('ping'); toast(t('sync_test_ok')); }catch(e){ toast(t('sync_fail')); } };
 $('#bNew').onclick=()=>{ if(confirm(t('new_q'))){ const keep=S.staff; S=blank(); FILES=[]; S.staff=keep; renderForm(); refresh(); } };
 $('#bCsv').onclick=exportCsv;
 showTab('write'); applyLang();
